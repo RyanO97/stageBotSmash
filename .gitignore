@@ -1,0 +1,7 @@
+node_modules
+.env
+config.json
+stageBotSmash.code-workspace
+package-lock.json
+package.json
+.eslintrc.json
