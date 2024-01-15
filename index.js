@@ -39,25 +39,26 @@ client.once(Events.ClientReady, readyClient => {
 client.login(token);
 
 client.on(Events.InteractionCreate, async interaction => {
-	if (!interaction.isChatInputCommand()) return;
+	if (interaction.isChatInputCommand()) {
+		const command = interaction.client.commands.get(interaction.commandName);
 
-	const command = interaction.client.commands.get(interaction.commandName);
-
-	if (!command) {
-		console.error(`No command matching ${interaction.commandName} was found.`);
-		return;
-	}
-
-	try {
-		await command.execute(interaction);
-	}
-	catch (error) {
-		console.error(error);
-		if (interaction.replied || interaction.deferred) {
-			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		if (!command) {
+			console.error(`No command matching ${interaction.commandName} was found.`);
+			return;
 		}
-		else {
-			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+
+		try {
+			await command.execute(interaction);
+		} catch (error) {
+			console.error(`Error executing ${interaction.commandName}`);
+			console.error(error);
 		}
+	}
+	else if (interaction.isButton()) {
+		// respond to the button
+	}
+	else if (interaction.isStringSelectMenu()) {
+		// respond to the select menu
+		console.log('option selected');
 	}
 });
