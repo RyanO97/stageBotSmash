@@ -1,5 +1,18 @@
-const { Events } = require('discord.js');
+const { bold, italic, Events } = require('discord.js');
+const s = JSON.parse(require('fs').readFileSync('./data/stages.json'));
+const p = JSON.parse(require('fs').readFileSync('./data/stage_pools.json'));
 
+function starters(stagelist, counterpicks) {
+	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
+	return starts;
+}
+function names(stagelist) {
+	let nameList = '';
+	for (let i = 0; i < stagelist.length; i++) {
+		nameList = nameList + (s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName + '\n');
+	}
+	return nameList;
+}
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
@@ -23,7 +36,8 @@ module.exports = {
 			// respond to the button
 		}
 		else if (interaction.isStringSelectMenu()) {
-			interaction.reply(`User has selected ${interaction.values[0]}`); console.log(interaction.values);
+			const data = p.stagePools.filter((pool) => {return pool.stagePoolName === interaction.values[0];});
+			interaction.reply(`User has selected ${italic(interaction.values[0])}\nwith Starters \n${bold(names(starters(data[0].stagePool, data[0].cp)))}and Counterpicks \n${bold(names(data[0].cp))}`);
 		}
 	},
 };

@@ -2,7 +2,7 @@ const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder
 
 const p = JSON.parse(require('fs').readFileSync('./data/stage_pools.json'));
 module.exports = {
-	data: new SlashCommandBuilder().setName('sim').setDescription('modal for predicting stage selections between fighters and and a set of stages'),
+	data: new SlashCommandBuilder().setName('list').setDescription('View stage lists'),
 	async execute(interaction) {
 		const select = new StringSelectMenuBuilder()
 			.setCustomId('starter')
