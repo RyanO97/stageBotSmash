@@ -1,6 +1,6 @@
 const { bold, italic, Events } = require('discord.js');
-const s = JSON.parse(require('fs').readFileSync('./data/stages.json'));
-const p = JSON.parse(require('fs').readFileSync('./data/stage_pools.json'));
+const s = require('../data/stages.json');
+const p = require('../data/stage_pools.json');
 
 function starters(stagelist, counterpicks) {
 	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});

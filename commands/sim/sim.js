@@ -1,6 +1,6 @@
 const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder } = require('discord.js');
 
-const p = JSON.parse(require('fs').readFileSync('./data/stage_pools.json'));
+const p = require('../../data/stage_pools.json');
 module.exports = {
 	data: new SlashCommandBuilder().setName('sim').setDescription('modal for predicting stage selections between fighters and and a set of stages'),
 	async execute(interaction) {
