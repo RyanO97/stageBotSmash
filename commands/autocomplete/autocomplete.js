@@ -5,7 +5,7 @@ const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
 const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
 const pools = p.stagePools
-	.map((list) => { return { name:list.stagePoolName, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
+	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
 const characters = f.fighters
 	.filter((fighter) => {return fighterList.includes(fighter.fid);})
 	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
@@ -62,9 +62,13 @@ module.exports = {
 	async execute(interaction) {
 		const a = interaction.options.getString('fighter');
 		const character = characters.find((c) => c.name === a);
+		const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
+		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
+		const fighterSet = names(fighterPool);
 
-		interaction.reply(`user selected fighter ${character.name} and ${list.name}\n${list.set}`);
+		interaction.reply(`user selected fighter ${character.name} and ${list.name}\n${list.set}\n${character.name} has data for ${fighterSet}`);
 	},
 };
