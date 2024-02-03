@@ -49,7 +49,8 @@ module.exports = {
 
 			try {
 				await command.autocomplete(interaction);
-			} catch (error) {
+			}
+			catch (error) {
 				console.error(error);
 			}
 		}
