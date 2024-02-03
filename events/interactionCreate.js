@@ -38,8 +38,8 @@ module.exports = {
 			// respond to the button
 		}
 		else if (interaction.isStringSelectMenu()) {
-			const selected = pools.find((stage) => {return stage.name = interaction.values[0];});
-			interaction.reply(`User has selected ${italic(interaction.values[0])}\n${selected.set}`);
+			const selected = pools.find((stage) => {return stage.name === interaction.values[0];}).set;
+			interaction.reply(`User has selected ${italic(interaction.values[0])}\n${selected}`);
 		}
 		else if (interaction.isAutocomplete()) {
 			const command = interaction.client.commands.get(interaction.commandName);

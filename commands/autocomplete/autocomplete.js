@@ -17,7 +17,7 @@ function starters(stagelist, counterpicks) {
 function names(stagelist) {
 	let nameList = '';
 	for (let i = 0; i < stagelist.length; i++) {
-		nameList = nameList + (s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName + ',');
+		nameList = nameList + (s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName + '\n');
 	}
 	return nameList;
 }
@@ -69,6 +69,6 @@ module.exports = {
 		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
 		const fighterSet = names(fighterPool);
 
-		interaction.reply(`user selected fighter ${character.name} and ${list.name}\n${list.set}\n${character.name} has data for ${fighterSet}`);
+		interaction.reply(`For the ruleset ${bold(italic(list.name))}\n\n${bold(italic(character.name))} has cpu data for \n${bold(fighterSet)}`);
 	},
 };
