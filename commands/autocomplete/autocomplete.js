@@ -46,7 +46,7 @@ module.exports = {
 				.map(choice => ({ name: choice.name, value: choice.name }));
 			await interaction
 				.respond(filtered.slice(0, 25))
-				.catch(() => {() => {return;};});
+				.catch(() => {console.error;});
 		}
 		else if (focusedValue.name === 'stagelist') {
 			const choices = pools;
@@ -55,7 +55,7 @@ module.exports = {
 				.map(choice => ({ name: choice.name, value: choice.name }));
 			await interaction
 				.respond(filtered.slice(0, 25))
-				.catch(() => {() => {return;};});
+				.catch(() => {console.error;});
 		}
 
 	},

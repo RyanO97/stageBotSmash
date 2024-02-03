@@ -7,7 +7,7 @@ module.exports = {
 		const select = new StringSelectMenuBuilder()
 			.setCustomId('starter')
 			.setPlaceholder('Make a selection!')
-			.addOptions(p.stagePools.map((list) => new StringSelectMenuOptionBuilder().setLabel(list.stagePoolName).setDescription('Tournament Stage List').setValue(list.stagePoolName)));
+			.addOptions(p.stagePools.map((list) => new StringSelectMenuOptionBuilder().setLabel(list.stagePoolName).setValue(list.stagePoolName)));
 
 		const row = new ActionRowBuilder()
 			.addComponents(select);
