@@ -1,6 +1,8 @@
 const { bold, italic, Events } = require('discord.js');
 const s = require('../data/stages.json');
 const p = require('../data/stage_pools.json');
+const pools = p.stagePools
+	.map((list) => { return { name:list.stagePoolName, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
 
 function starters(stagelist, counterpicks) {
 	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
@@ -36,8 +38,8 @@ module.exports = {
 			// respond to the button
 		}
 		else if (interaction.isStringSelectMenu()) {
-			const data = p.stagePools.filter((pool) => {return pool.stagePoolName === interaction.values[0];});
-			interaction.reply(`User has selected ${italic(interaction.values[0])}\nwith Starters \n${bold(names(starters(data[0].stagePool, data[0].cp)))}and Counterpicks \n${bold(names(data[0].cp))}`);
+			const selected = pools.find((stage) => {return stage.name = interaction.values[0];});
+			interaction.reply(`User has selected ${italic(interaction.values[0])}\n${selected.set}`);
 		}
 		else if (interaction.isAutocomplete()) {
 			const command = interaction.client.commands.get(interaction.commandName);
