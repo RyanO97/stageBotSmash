@@ -1,20 +1,98 @@
-const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder } = require('discord.js');
-
+const { bold, italic, SlashCommandBuilder } = require('discord.js');
+const d = require('../../data/fighter_stage_prefs.json');
+const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
+const s = require('../../data/stages.json');
+const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
+const pools = p.stagePools
+	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
+const characters = f.fighters
+	.filter((fighter) => {return fighterList.includes(fighter.fid);})
+	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
+
+function starters(stagelist, counterpicks) {
+	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
+	return starts;
+}
+function names(stagelist) {
+	let nameList = '';
+	for (let i = 0; i < stagelist.length; i++) {
+		nameList = nameList + `(${i + 1}. ${s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName})\n`;
+	}
+	return nameList;
+}
 module.exports = {
-	data: new SlashCommandBuilder().setName('sim').setDescription('modal for predicting stage selections between fighters and and a set of stages'),
+	data: new SlashCommandBuilder()
+		.setName('sim')
+		.setDescription('Search discordjs.guide!')
+		.addStringOption(option =>
+			option.setName('fighter1')
+				.setDescription('Choose a fighter')
+				.setAutocomplete(true)
+				.setRequired(true),
+		)
+		.addStringOption(option =>
+			option.setName('fighter2')
+				.setDescription('Choose another fighter')
+				.setAutocomplete(true)
+				.setRequired(true),
+		)
+		.addStringOption(option =>
+			option.setName('stagelist')
+				.setDescription('Choose a stagelist')
+				.setAutocomplete(true)
+				.setRequired(true),
+		),
+	async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused(true);
+		if (focusedValue.name === 'fighter1') {
+			const choices = characters;
+			const filtered = choices
+				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
+				.map(choice => ({ name: choice.name, value: choice.name }));
+			await interaction
+				.respond(filtered.slice(0, 25))
+				.catch(() => {console.error;});
+		}
+		else if (focusedValue.name === 'fighter2') {
+			const choices = characters;
+			const filtered = choices
+				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
+				.map(choice => ({ name: choice.name, value: choice.name }));
+			await interaction
+				.respond(filtered.slice(0, 25))
+				.catch(() => {console.error;});
+		}
+		else if (focusedValue.name === 'stagelist') {
+			const choices = pools;
+			const filtered = choices
+				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
+				.map(choice => ({ name: choice.name, value: choice.name }));
+			await interaction
+				.respond(filtered.slice(0, 25))
+				.catch(() => {console.error;});
+		}
+
+	},
 	async execute(interaction) {
-		const select = new StringSelectMenuBuilder()
-			.setCustomId('starter')
-			.setPlaceholder('Make a selection!')
-			.addOptions(p.stagePools.map((list) => new StringSelectMenuOptionBuilder().setLabel(list.stagePoolName).setDescription('Tournament Stage List').setValue(list.stagePoolName)));
+		// get input
+		const a = interaction.options.getString('fighter1');
+		const b = interaction.options.getString('fighter2');
+		const f1 = characters.find((c) => c.name === a);
+		const f2 = characters.find((c) => c.name === b);
+		const f1Pref = d.stagePrefs.find((fighter) => {return fighter.fid === f1.id;}).stage_pref;
+		const f2Pref = d.stagePrefs.find((fighter) => {return fighter.fid === f2.id;}).stage_pref;
 
-		const row = new ActionRowBuilder()
-			.addComponents(select);
+		const l = interaction.options.getString('stagelist');
+		const list = pools.find((c) => c.name === l);
+		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 
-		await interaction.reply({
-			content: 'Choose your Stage List!',
-			components: [row],
-		});
+		const f1Pool = f1Pref.filter((stage) => {return selectedPool.includes(stage);});
+		const f2Pool = f2Pref.filter((stage) => {return selectedPool.includes(stage);});
+
+		const f1Results = '';
+		const f2Results = '';
+
+		interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${f1.name} has data\n${bold(names(f1Pool))}\n${f2.name} has data\n${bold(names(f2Pool))}`);
 	},
 };
