@@ -18,8 +18,8 @@ function starters(stagelist, counterpicks) {
 function stagePick(ban, pick) {
 	if (ban.length >= 3 && pick.length >= 3) {
 		const bans = [];
-		bans.push(ban.pop());
-		bans.push(ban.pop());
+		bans.push(ban[ban.length - 1]);
+		bans.push(ban[ban.length - 2]);
 		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
 		const b2 = s.stages.find((st2) => {return st2.sid === bans[1];}).stageName;
 		const opponentPicks = pick.filter((stage) => {return !bans.includes(stage);});
@@ -27,7 +27,7 @@ function stagePick(ban, pick) {
 	}
 	else if ((ban.length >= 3 && pick.length == 2) || (ban.length == 2 && pick.length == 2)) {
 		const bans = [];
-		bans.push(ban.pop());
+		bans.push(ban[ban.length - 1]);
 		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
 		const opponentPicks = pick.filter((stage) => {return bans.includes(stage);});
 		return `will ban ${strikethrough(b1)}, and will be taken to ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
