@@ -1,4 +1,4 @@
-const { bold, italic, SlashCommandBuilder } = require('discord.js');
+const { bold, strikethrough, italic, SlashCommandBuilder } = require('discord.js');
 const d = require('../../data/fighter_stage_prefs.json');
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
@@ -13,6 +13,28 @@ const characters = f.fighters
 function starters(stagelist, counterpicks) {
 	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
 	return starts;
+}
+
+function stagePick(ban, pick) {
+	if (ban.length >= 3 && pick.length >= 3) {
+		const bans = [];
+		bans.push(ban.pop());
+		bans.push(ban.pop());
+		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
+		const b2 = s.stages.find((st2) => {return st2.sid === bans[1];}).stageName;
+		const opponentPicks = pick.filter((stage) => {return !bans.includes(stage);});
+		return `will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and will be taken to ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
+	}
+	else if ((ban.length >= 3 && pick.length == 2) || (ban.length == 2 && pick.length == 2)) {
+		const bans = [];
+		bans.push(ban.pop());
+		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
+		const opponentPicks = pick.filter((stage) => {return bans.includes(stage);});
+		return `will ban ${strikethrough(b1)}, and will be taken to ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
+	}
+	else {
+		return 'does not have sufficient stage data';
+	}
 }
 function names(stagelist) {
 	let nameList = '';
@@ -90,9 +112,9 @@ module.exports = {
 		const f1Pool = f1Pref.filter((stage) => {return selectedPool.includes(stage);});
 		const f2Pool = f2Pref.filter((stage) => {return selectedPool.includes(stage);});
 
-		const f1Results = '';
-		const f2Results = '';
+		const f1Results = stagePick(f1Pool, f2Pool);
+		const f2Results = stagePick(f2Pool, f1Pool);
 
-		interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${f1.name} has data\n${bold(names(f1Pool))}\n${f2.name} has data\n${bold(names(f2Pool))}`);
+		interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${f1.name} ${f1Results}\n${f2.name} ${f2Results}`);
 	},
 };
