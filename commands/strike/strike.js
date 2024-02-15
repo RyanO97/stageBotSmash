@@ -1,4 +1,4 @@
-const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType } = require('discord.js');
+const { bold, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType } = require('discord.js');
 
 const p = require('../../data/stage_pools.json');
 const d = require('../../data/fighter_stage_prefs.json');
@@ -59,13 +59,13 @@ module.exports = {
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
 		const stageSelections = stages.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
-
+		const numBans = fighterPool.length >= 3 ? 2 : 1;
 		const select = new StringSelectMenuBuilder()
 			.setCustomId('strike')
 			.setPlaceholder('select stage bans')
 			.addOptions(stageSelections)
-			.setMinValues(2)
-			.setMaxValues(2);
+			.setMinValues(numBans)
+			.setMaxValues(numBans);
 		const row = new ActionRowBuilder()
 			.addComponents(select);
 
@@ -86,7 +86,7 @@ module.exports = {
 			});
 			const decision = fighterPool.filter((picks) => {return !bans.includes(picks);});
 			const pickName = s.stages.find((n) => {return n.sid === decision[0];}).stageName;
-			await i.reply(`${character.name} picks ${pickName}!`);
+			await i.reply(`${character.name} picks ${bold(pickName)}!`);
 		});
 	},
 };

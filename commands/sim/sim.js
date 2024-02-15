@@ -4,16 +4,11 @@ const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
 const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
-const pools = p.stagePools
-	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
+const pools = p.stagePools.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId };});
 const characters = f.fighters
 	.filter((fighter) => {return fighterList.includes(fighter.fid);})
 	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 
-function starters(stagelist, counterpicks) {
-	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
-	return starts;
-}
 
 function stagePick(ban, pick) {
 	if (ban.length >= 3 && pick.length >= 3) {
@@ -35,13 +30,6 @@ function stagePick(ban, pick) {
 	else {
 		return 'does not have sufficient stage data';
 	}
-}
-function names(stagelist) {
-	let nameList = '';
-	for (let i = 0; i < stagelist.length; i++) {
-		nameList = nameList + `(${i + 1}. ${s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName})\n`;
-	}
-	return nameList;
 }
 module.exports = {
 	data: new SlashCommandBuilder()
