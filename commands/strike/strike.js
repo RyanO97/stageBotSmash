@@ -1,39 +1,30 @@
-const { bold, italic, SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType } = require('discord.js');
+
+const p = require('../../data/stage_pools.json');
 const d = require('../../data/fighter_stage_prefs.json');
 const f = require('../../data/fighters.json');
-const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
+
 const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
 const pools = p.stagePools
-	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
+	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId };});
 const characters = f.fighters
 	.filter((fighter) => {return fighterList.includes(fighter.fid);})
 	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
-
-function starters(stagelist, counterpicks) {
-	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
-	return starts;
-}
-function names(stagelist) {
-	let nameList = '';
-	for (let i = 0; i < stagelist.length; i++) {
-		nameList = nameList + (s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName + '\n');
-	}
-	return nameList;
-}
+const stages = s.stages;
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('data')
-		.setDescription('Check stage data for bot')
+		.setName('strike')
+		.setDescription('stage strike against a bot')
 		.addStringOption(option =>
 			option.setName('fighter')
-				.setDescription('Choose your fighter')
+				.setDescription('Choose your opponent')
 				.setAutocomplete(true)
 				.setRequired(true),
 		)
 		.addStringOption(option =>
 			option.setName('stagelist')
-				.setDescription('Choose your stagelist')
+				.setDescription('Choose a stage list')
 				.setAutocomplete(true)
 				.setRequired(true),
 		),
@@ -67,8 +58,35 @@ module.exports = {
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
-		const fighterSet = names(fighterPool);
+		const stageSelections = stages.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
 
-		interaction.reply(`For the ruleset ${bold(italic(list.name))}\n\n${bold(italic(character.name))} has cpu data for \n${bold(fighterSet)}`);
+		const select = new StringSelectMenuBuilder()
+			.setCustomId('strike')
+			.setPlaceholder('select stage bans')
+			.addOptions(stageSelections)
+			.setMinValues(2)
+			.setMaxValues(2);
+		const row = new ActionRowBuilder()
+			.addComponents(select);
+
+		const response = await interaction.reply({
+			content: 'Choose your bans',
+			components: [row],
+		});
+
+		const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
+
+		collector.on('collect', async i => {
+			const selection = i.values;
+			const bans = selection.map((ban) => {
+				return stages.find((name) => {
+					return ban === name.stageName;
+				})
+					.sid;
+			});
+			const decision = fighterPool.filter((picks) => {return !bans.includes(picks);});
+			const pickName = s.stages.find((n) => {return n.sid === decision[0];}).stageName;
+			await i.reply(`${character.name} picks ${pickName}!`);
+		});
 	},
 };

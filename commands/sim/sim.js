@@ -30,7 +30,7 @@ function stagePick(ban, pick) {
 		bans.push(ban[ban.length - 1]);
 		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
 		const opponentPicks = pick.filter((stage) => {return bans.includes(stage);});
-		return `will ban ${strikethrough(b1)}, and will be taken to ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
+		return `will ban ${strikethrough(b1)}, and the opponent picks ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
 	}
 	else {
 		return 'does not have sufficient stage data';
@@ -46,7 +46,7 @@ function names(stagelist) {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('sim')
-		.setDescription('Search discordjs.guide!')
+		.setDescription('simulate stage selection between cpus')
 		.addStringOption(option =>
 			option.setName('fighter1')
 				.setDescription('Choose a fighter')
