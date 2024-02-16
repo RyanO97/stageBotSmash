@@ -9,11 +9,21 @@ const pools = p.stagePools
 const characters = f.fighters
 	.filter((fighter) => {return fighterList.includes(fighter.fid);})
 	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
-
+/**
+ *
+ * @param {Array} stagelist the complete list of stages
+ * @param {Array} counterpicks the array of stages tagged as counterpicks
+ * @returns Array of id's of starter stages, used in a game 1 of a match
+ */
 function starters(stagelist, counterpicks) {
 	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
 	return starts;
 }
+/**
+ *
+ * @param {Array} stagelist the list of id's to return stage names
+ * @returns string stage names of each id in array
+ */
 function names(stagelist) {
 	let nameList = '';
 	for (let i = 0; i < stagelist.length; i++) {
@@ -60,15 +70,17 @@ module.exports = {
 
 	},
 	async execute(interaction) {
+		// get fighter data
 		const a = interaction.options.getString('fighter');
 		const character = characters.find((c) => c.name === a);
 		const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
+		// filter down fighter data with the given stage list
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
 		const fighterSet = names(fighterPool);
-
+		// bot response
 		interaction.reply(`For the ruleset ${bold(italic(list.name))}\n\n${bold(italic(character.name))} has cpu data for \n${bold(fighterSet)}`);
 	},
 };
