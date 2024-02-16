@@ -49,5 +49,7 @@ Current data is collected and synthesized using a copy of Super Smash Bros. Ulti
 
 # More questions, or bug reporting?
 Please feel free to contact the developer via email or discord
+
 email: emceeromeo@gmail.com
+
 discord: @romioh
