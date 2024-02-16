@@ -32,21 +32,22 @@ enhancements to /strike and /pick to enable stage picking between users instead 
 include an additional parameter to each command to simulate stagepicking for the game 1 of a match - a game1 flag 
 
 # QNA
-*How come not all [in-game] fighters are not available in the pick and strike commands?
+
+# How come not all [in-game] fighters are not available in the pick and strike commands?
 
 I collected synthetic data by simulating games between fighter ai and recording the results. the bot's data is based on historical performance for fighters recorded on each stage. 
 If the fighter does not have enough data for enough stages then they are limited in their strikes or not available at all for selection.
 
-*How does the data evaluate strikes or pick stages?
+# How does the data evaluate strikes or pick stages?
 The historical performance ranks the stages for a given fighter from best to worst. Each stage strike from a bot selects stages with their worst performance historically, and each pick is based on their best performance historically. The algorithm is in-house, and based around a specific game
 
-*How do you decide which stages are competitive?
+# How do you decide which stages are competitive?
 The set of competitive stages is arbitrary. I started collecting data based on stages used in competitions at the current time as well as alternative stages that game fans use. In the event an actual game tournament introduces a new stage aside from the existing stage the data has, data collection for said stage will be considered
 
-*What video game(s) are you recording data for?
+# What video game(s) are you recording data for?
 Current data is collected and synthesized using a copy of Super Smash Bros. Ultimate for the Nintendo Switch. In theory, other variations of this bot can use data for other video games in the event their respective develoeprs establish their own data collection methods, and an in-house algorithm to rank their fighters' best and worst stages accordingly. 
 
-*More questions, or bug reporting?
+# More questions, or bug reporting?
 Please feel free to contact the developer via email or discord
 email: emceeromeo@gmail.com
 discord: @romioh
