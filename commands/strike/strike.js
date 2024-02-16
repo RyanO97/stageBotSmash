@@ -51,12 +51,15 @@ module.exports = {
 
 	},
 	async execute(interaction) {
+		// get fighter data
 		const a = interaction.options.getString('fighter');
 		const character = characters.find((c) => c.name === a);
 		const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
+		// get selected stage list data
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+		// determine number of strikes and stages for user to select
 		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
 		const stageSelections = stages.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
 		const numBans = fighterPool.length >= 3 ? 2 : 1;
@@ -76,6 +79,7 @@ module.exports = {
 
 		const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
 
+		// bot response
 		collector.on('collect', async i => {
 			const selection = i.values;
 			const bans = selection.map((ban) => {

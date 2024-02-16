@@ -51,13 +51,19 @@ module.exports = {
 
 	},
 	async execute(interaction) {
+		// match user input against known fighters
 		const a = interaction.options.getString('fighter');
 		const character = characters.find((c) => c.name === a);
+
+		// get the fighter data
 		const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
+
+		// filter the fighter data down to the selected stage list
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
+		// based on fighter data, apply worst stage bans to selection list before user selection
 		const strikePool = fighterPool.length >= 3 ? [fighterPool[fighterPool.length - 1], fighterPool[fighterPool.length - 2]] : [fighterPool[fighterPool.length - 1]];
 		const selections = selectedPool.filter((stage) => {return !strikePool.includes(stage);});
 		const stageSelections = stages.filter((stage) => {return selections.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
@@ -85,16 +91,10 @@ module.exports = {
 
 		const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
 
+		// bot response
 		collector.on('collect', async i => {
-			const selection = i.values;
-			const pick = selection.map((ban) => {
-				return stages.find((name) => {
-					return ban === name.stageName;
-				})
-					.sid;
-			});
-			const pickName = stages.find((n) => {return n.sid === pick[0];}).stageName;
-			await i.reply(`${interaction.user} picks ${bold(pickName)}!`);
+			const selection = i.values[0];
+			await i.reply(`${interaction.user} picks ${bold(selection)}!`);
 		});
 	},
 };

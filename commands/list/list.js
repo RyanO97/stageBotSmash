@@ -4,11 +4,21 @@ const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
 const pools = p.stagePools
 	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
-
+/**
+ *
+ * @param {Array} stagelist the complete list of stages
+ * @param {Array} counterpicks the array of stages tagged as counterpicks
+ * @returns Array of id's of starter stages, used in a game 1 of a match
+ */
 function starters(stagelist, counterpicks) {
 	const starts = stagelist.filter((id) => {return !counterpicks.includes(id);});
 	return starts;
 }
+/**
+ *
+ * @param {Array} stagelist the list of id's to return stage names
+ * @returns string stage names of each id in array
+ */
 function names(stagelist) {
 	let nameList = '';
 	for (let i = 0; i < stagelist.length; i++) {

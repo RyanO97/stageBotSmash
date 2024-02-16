@@ -9,7 +9,12 @@ const characters = f.fighters
 	.filter((fighter) => {return fighterList.includes(fighter.fid);})
 	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 
-
+/**
+	 *
+	 * @param {Array} ban the ordered list of stages of player that is banning stages
+	 * @param {Array} pick the ordered list of stages of player that is going to pick the stage for game
+	 * @returns string indicating the strike and counterpick resulsts between fighters
+	 */
 function stagePick(ban, pick) {
 	if (ban.length >= 3 && pick.length >= 3) {
 		const bans = [];
@@ -85,21 +90,21 @@ module.exports = {
 
 	},
 	async execute(interaction) {
-		// get input
+		// get fighters and data
 		const a = interaction.options.getString('fighter1');
 		const b = interaction.options.getString('fighter2');
 		const f1 = characters.find((c) => c.name === a);
 		const f2 = characters.find((c) => c.name === b);
 		const f1Pref = d.stagePrefs.find((fighter) => {return fighter.fid === f1.id;}).stage_pref;
 		const f2Pref = d.stagePrefs.find((fighter) => {return fighter.fid === f2.id;}).stage_pref;
-
+		// get stage list data
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
-
+		// filter down fighter's data based on stagelist
 		const f1Pool = f1Pref.filter((stage) => {return selectedPool.includes(stage);});
 		const f2Pool = f2Pref.filter((stage) => {return selectedPool.includes(stage);});
-
+		// capture actions between players in a match
 		const f1Results = stagePick(f1Pool, f2Pool);
 		const f2Results = stagePick(f2Pool, f1Pool);
 
