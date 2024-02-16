@@ -1,5 +1,5 @@
 # Stagebot 1.0.2
-# Stage Picking - A necessary process betweeen two entrants in a fighting game tournament that decides the stages for each game in a series. 
+# Stage Picking - A necessary process betweeen two entrants in a fighting game tournament that decides the stages for each game in a match. 
 
 This is Project "Stagebot"(Subject to change, please and thanks!) <br />
 
