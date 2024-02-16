@@ -45,7 +45,7 @@ The historical performance ranks the stages for a given fighter from best to wor
 The set of competitive stages is arbitrary. I started collecting data based on stages used in competitions at the current time as well as alternative stages that game fans use. In the event an actual game tournament introduces a new stage aside from the existing stage the data has, data collection for said stage will be considered
 
 # What video game(s) are you recording data for?
-Current data is collected and synthesized using a copy of Super Smash Bros. Ultimate for the Nintendo Switch. In theory, other variations of this bot can use data for other video games if develoeprs accommodate their own data collection methods, an in-house algorithm for their data, and the proper json data sources for the commands to use. 
+Current data is collected and synthesized using a copy of Super Smash Bros. Ultimate for the Nintendo Switch. In theory, other variations of this bot can use data for other video games if developers accommodate their own data collection methods, an in-house algorithm for their data, and the proper json data sources for the commands to use. 
 
 # More questions, or bug reporting?
 Please feel free to contact the developer via email or discord
