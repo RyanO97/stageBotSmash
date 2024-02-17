@@ -46,7 +46,7 @@ module.exports = {
 		collector.on('collect', async i => {
 			const selection = i.values[0];
 			const picked = pools.find((c) => c.name === selection).set;
-			await i.reply(`${picked}`);
+			await i.reply(`Stage list for ${bold(selection)}\n${picked}`);
 		});
 	},
 };
