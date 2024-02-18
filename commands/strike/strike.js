@@ -70,7 +70,9 @@ module.exports = {
 	},
 	async execute(interaction) {
 		// get fighter data
-		const a = interaction.options.getString('fighter');
+		const subcmd = interaction.options._subcommand;
+		const a = subcmd === 'bot' ? interaction.options.getString('fighter') : interaction.options.getString('user');
+		// load fighter data if bot, else strike with mentioned user
 		const character = characters.find((c) => c.name === a);
 		const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
 		// get selected stage list data
