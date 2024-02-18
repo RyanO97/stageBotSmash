@@ -3,8 +3,16 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
+const { Sequelize } = require('sequelize');
 
-
+const sequelize = new Sequelize('mysql://root:Imainmar10@localhost:3306/smashultimatesingles');
+try {
+	sequelize.authenticate();
+	console.log('database Connection has been established successfully.');
+}
+catch (error) {
+	console.error('Unable to connect to the database:', error);
+}
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // When the client is ready, run this code (only once).
