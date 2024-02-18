@@ -16,18 +16,36 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('strike')
 		.setDescription('stage strike against a bot')
-		.addStringOption(option =>
-			option.setName('fighter')
-				.setDescription('Choose your opponent')
-				.setAutocomplete(true)
-				.setRequired(true),
-		)
-		.addStringOption(option =>
-			option.setName('stagelist')
-				.setDescription('Choose a stage list')
-				.setAutocomplete(true)
-				.setRequired(true),
-		),
+		.addSubcommand((subcommand) =>
+			subcommand
+				.setName('user')
+				.setDescription('select a user to stage strike')
+				.addUserOption((option) =>
+					option.setName('username')
+						.setDescription('The user')
+						.setRequired(true))
+				.addStringOption((option) =>
+					option.setName('stagelist')
+						.setDescription('Choose a stage list')
+						.setAutocomplete(true)
+						.setRequired(true),
+				))
+		.addSubcommand((subcommand) =>
+			subcommand
+				.setName('bot')
+				.setDescription('stage strike against a bot')
+				.addStringOption((option) =>
+					option.setName('fighter')
+						.setDescription('Choose your opponent')
+						.setAutocomplete(true)
+						.setRequired(true),
+				)
+				.addStringOption((option) =>
+					option.setName('stagelist')
+						.setDescription('Choose a stage list')
+						.setAutocomplete(true)
+						.setRequired(true),
+				)),
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused(true);
 		if (focusedValue.name === 'fighter') {
