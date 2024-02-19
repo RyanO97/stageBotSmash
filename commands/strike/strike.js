@@ -1,4 +1,4 @@
-const { bold, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType } = require('discord.js');
+const { bold, strikethrough, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType } = require('discord.js');
 
 const p = require('../../data/stage_pools.json');
 const d = require('../../data/fighter_stage_prefs.json');
@@ -71,46 +71,109 @@ module.exports = {
 	async execute(interaction) {
 		// get fighter data
 		const subcmd = interaction.options._subcommand;
-		const a = subcmd === 'bot' ? interaction.options.getString('fighter') : interaction.options.getString('user');
-		// load fighter data if bot, else strike with mentioned user
-		const character = characters.find((c) => c.name === a);
-		const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
-		// get selected stage list data
-		const l = interaction.options.getString('stagelist');
-		const list = pools.find((c) => c.name === l);
-		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
-		// determine number of strikes and stages for user to select
-		const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
-		const stageSelections = stages.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
-		const numBans = fighterPool.length >= 3 ? 2 : 1;
-		const select = new StringSelectMenuBuilder()
-			.setCustomId('strike')
-			.setPlaceholder('select stage bans')
-			.addOptions(stageSelections)
-			.setMinValues(numBans)
-			.setMaxValues(numBans);
-		const row = new ActionRowBuilder()
-			.addComponents(select);
+		if (subcmd === 'bot') {
+			const a = interaction.options.getString('fighter');
+			// load fighter data if bot, else strike with mentioned user
+			const character = characters.find((c) => c.name === a);
+			const selectedPref = d.stagePrefs.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
+			// get selected stage list data
+			const l = interaction.options.getString('stagelist');
+			const list = pools.find((c) => c.name === l);
+			const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+			// determine number of strikes and stages for user to select
+			const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
+			const stageSelections = stages.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
+			const numBans = fighterPool.length >= 3 ? 2 : 1;
+			const select = new StringSelectMenuBuilder()
+				.setCustomId('strike')
+				.setPlaceholder('select stage bans')
+				.addOptions(stageSelections)
+				.setMinValues(numBans)
+				.setMaxValues(numBans);
+			const row = new ActionRowBuilder()
+				.addComponents(select);
 
-		const response = await interaction.reply({
-			content: 'Choose your bans',
-			components: [row],
-		});
-
-		const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
-
-		// bot response
-		collector.on('collect', async i => {
-			const selection = i.values;
-			const bans = selection.map((ban) => {
-				return stages.find((name) => {
-					return ban === name.stageName;
-				})
-					.sid;
+			const response = await interaction.reply({
+				content: 'Choose your bans',
+				components: [row],
 			});
-			const decision = fighterPool.filter((picks) => {return !bans.includes(picks);});
-			const pickName = s.stages.find((n) => {return n.sid === decision[0];}).stageName;
-			await i.reply(`${character.name} picks ${bold(pickName)}!`);
-		});
+
+			const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
+
+			// bot response
+			collector.on('collect', async i => {
+				const selection = i.values;
+				const bans = selection.map((ban) => {
+					return stages.find((name) => {
+						return ban === name.stageName;
+					})
+						.sid;
+				});
+				const decision = fighterPool.filter((picks) => {return !bans.includes(picks);});
+				const pickName = s.stages.find((n) => {return n.sid === decision[0];}).stageName;
+				await i.reply(`${character.name} picks ${bold(pickName)}!`);
+			});
+
+		}
+		else if (subcmd === 'user') {
+			const a = interaction.options.getUser('username');
+			// get selected stage list data
+			const l = interaction.options.getString('stagelist');
+			const list = pools.find((c) => c.name === l);
+			const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+			// determine number of strikes and stages for user to select
+			const stageSelections = stages.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
+			const select = new StringSelectMenuBuilder()
+				.setCustomId('strike')
+				.setPlaceholder('select stage bans')
+				.addOptions(stageSelections)
+				.setMinValues(2)
+				.setMaxValues(2);
+			const row = new ActionRowBuilder()
+				.addComponents(select);
+
+			const response = await interaction.reply({
+				content: 'Choose your bans',
+				components: [row],
+			});
+
+			const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
+
+			// bot response
+			collector.on('collect', async i => {
+				const selection = i.values;
+				const bans = selection.map((ban) => {
+					return stages.find((name) => {
+						return ban === name.stageName;
+					})
+						.sid;
+				});
+				const strikePool = [bans[0], bans[1]];
+				const selections = selectedPool.filter((stage) => {return !strikePool.includes(stage);});
+				const opponentSelections = stages.filter((stage) => {return selections.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
+
+				const strikeNames = strikePool
+					.map((stage) => {
+						return strikethrough(stages
+							.find((n) => {return n.sid === stage;}).stageName);
+					});
+				const strikeString = `${interaction.user} bans the following stages\n${strikeNames.toString()}\n${a}, Choose a stage`;
+
+				const opponentSelect = new StringSelectMenuBuilder()
+					.setCustomId('opponentpick')
+					.setPlaceholder('Pick a stage')
+					.addOptions(opponentSelections)
+					.setMinValues(1)
+					.setMaxValues(1);
+				const opponentRow = new ActionRowBuilder()
+					.addComponents(opponentSelect);
+
+				await interaction.followUp({
+					content: strikeString,
+					components: [opponentRow],
+				});
+			});
+		}
+
 	},
 };

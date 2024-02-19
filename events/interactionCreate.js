@@ -23,6 +23,10 @@ module.exports = {
 			// respond to the button
 		}
 		else if (interaction.isStringSelectMenu()) {
+			if (interaction.customId === 'opponentpick') {
+				interaction.reply(`${interaction.user} selected ${interaction.values[0]}`);
+				return;
+			}
 			const command = interaction.client.commands.get(interaction.commandName);
 
 			if (!command) {
