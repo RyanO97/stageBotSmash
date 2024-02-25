@@ -34,7 +34,7 @@ function names(stagelist) {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('data')
-		.setDescription('Check stage data for bot')
+		.setDescription('check stage data for bot')
 		.addStringOption(option =>
 			option.setName('fighter')
 				.setDescription('Choose your fighter')
