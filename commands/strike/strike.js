@@ -90,7 +90,8 @@ module.exports = {
 			});
 			const decision = fighterPool.filter((picks) => {return !bans.includes(picks);});
 			const pickName = s.stages.find((n) => {return n.sid === decision[0];}).stageName;
-			await i.reply(`${character.name} picks ${bold(pickName)}!`);
+			const secondaryPick = decision.length > 1 ? s.stages.find((n) => {return n.sid === decision[1];}).stageName : '';
+			await i.reply(`${character.name} picks ${bold(pickName)}!${decision.length > 1 ? '\nSecondary pick is ' + bold(secondaryPick) + '!' : ''}`);
 		});
 	},
 };

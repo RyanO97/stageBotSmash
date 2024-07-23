@@ -1,0 +1,336 @@
+{
+  "fighters": [
+    {
+      "fid": 1,
+      "fighterName": "Mario"
+    },
+    {
+      "fid": 2,
+      "fighterName": "Donkey Kong"
+    },
+    {
+      "fid": 3,
+      "fighterName": "Link"
+    },
+    {
+      "fid": 4,
+      "fighterName": "Samus"
+    },
+    {
+      "fid": 5,
+      "fighterName": "Dark Samus"
+    },
+    {
+      "fid": 6,
+      "fighterName": "Yoshi"
+    },
+    {
+      "fid": 7,
+      "fighterName": "Kirby"
+    },
+    {
+      "fid": 8,
+      "fighterName": "Fox"
+    },
+    {
+      "fid": 9,
+      "fighterName": "Pikachu"
+    },
+    {
+      "fid": 10,
+      "fighterName": "Luigi"
+    },
+    {
+      "fid": 11,
+      "fighterName": "Ness"
+    },
+    {
+      "fid": 12,
+      "fighterName": "Captain Falcon"
+    },
+    {
+      "fid": 13,
+      "fighterName": "Jigglypuff"
+    },
+    {
+      "fid": 14,
+      "fighterName": "Peach"
+    },
+    {
+      "fid": 15,
+      "fighterName": "Daisy"
+    },
+    {
+      "fid": 16,
+      "fighterName": "Bowser"
+    },
+    {
+      "fid": 17,
+      "fighterName": "Ice Climbers"
+    },
+    {
+      "fid": 18,
+      "fighterName": "Sheik"
+    },
+    {
+      "fid": 19,
+      "fighterName": "Zelda"
+    },
+    {
+      "fid": 20,
+      "fighterName": "Dr. Mario"
+    },
+    {
+      "fid": 21,
+      "fighterName": "Pichu"
+    },
+    {
+      "fid": 22,
+      "fighterName": "Falco"
+    },
+    {
+      "fid": 23,
+      "fighterName": "Marth"
+    },
+    {
+      "fid": 24,
+      "fighterName": "Lucina"
+    },
+    {
+      "fid": 25,
+      "fighterName": "Young Link"
+    },
+    {
+      "fid": 26,
+      "fighterName": "Ganondorf"
+    },
+    {
+      "fid": 27,
+      "fighterName": "Mewtwo"
+    },
+    {
+      "fid": 28,
+      "fighterName": "Roy"
+    },
+    {
+      "fid": 29,
+      "fighterName": "Chrom"
+    },
+    {
+      "fid": 30,
+      "fighterName": "Game & Watch"
+    },
+    {
+      "fid": 31,
+      "fighterName": "Metaknight"
+    },
+    {
+      "fid": 32,
+      "fighterName": "Pit"
+    },
+    {
+      "fid": 33,
+      "fighterName": "Dark Pit"
+    },
+    {
+      "fid": 34,
+      "fighterName": "Zero Suit Samus"
+    },
+    {
+      "fid": 35,
+      "fighterName": "Wario"
+    },
+    {
+      "fid": 36,
+      "fighterName": "Snake "
+    },
+    {
+      "fid": 37,
+      "fighterName": "Ike"
+    },
+    {
+      "fid": 38,
+      "fighterName": "Pokemon Trainer "
+    },
+    {
+      "fid": 39,
+      "fighterName": "Diddy Kong"
+    },
+    {
+      "fid": 40,
+      "fighterName": "Lucas"
+    },
+    {
+      "fid": 41,
+      "fighterName": "Sonic"
+    },
+    {
+      "fid": 42,
+      "fighterName": "King Dedede"
+    },
+    {
+      "fid": 43,
+      "fighterName": "Olimar"
+    },
+    {
+      "fid": 44,
+      "fighterName": "Lucario"
+    },
+    {
+      "fid": 45,
+      "fighterName": "R.O.B."
+    },
+    {
+      "fid": 46,
+      "fighterName": "Toon Link"
+    },
+    {
+      "fid": 47,
+      "fighterName": "Wolf"
+    },
+    {
+      "fid": 48,
+      "fighterName": "Villager"
+    },
+    {
+      "fid": 49,
+      "fighterName": "Mega Man"
+    },
+    {
+      "fid": 50,
+      "fighterName": "Wii Fit Trainer"
+    },
+    {
+      "fid": 51,
+      "fighterName": "Rosalina & Luma"
+    },
+    {
+      "fid": 52,
+      "fighterName": "Little Mac"
+    },
+    {
+      "fid": 53,
+      "fighterName": "Greninja"
+    },
+    {
+      "fid": 54,
+      "fighterName": "Palutena"
+    },
+    {
+      "fid": 55,
+      "fighterName": "Pac-Man"
+    },
+    {
+      "fid": 56,
+      "fighterName": "Robin"
+    },
+    {
+      "fid": 57,
+      "fighterName": "Shulk"
+    },
+    {
+      "fid": 58,
+      "fighterName": "Bowser Jr."
+    },
+    {
+      "fid": 59,
+      "fighterName": "Duck Hunt"
+    },
+    {
+      "fid": 60,
+      "fighterName": "Ryu"
+    },
+    {
+      "fid": 61,
+      "fighterName": "Ken"
+    },
+    {
+      "fid": 62,
+      "fighterName": "Cloud"
+    },
+    {
+      "fid": 63,
+      "fighterName": "Corrin"
+    },
+    {
+      "fid": 64,
+      "fighterName": "Bayonetta"
+    },
+    {
+      "fid": 65,
+      "fighterName": "Inkling"
+    },
+    {
+      "fid": 66,
+      "fighterName": "Ridley"
+    },
+    {
+      "fid": 67,
+      "fighterName": "Simon Belmont"
+    },
+    {
+      "fid": 68,
+      "fighterName": "Richter"
+    },
+    {
+      "fid": 69,
+      "fighterName": "King K. Rool"
+    },
+    {
+      "fid": 70,
+      "fighterName": "Isabelle"
+    },
+    {
+      "fid": 71,
+      "fighterName": "Incineroar"
+    },
+    {
+      "fid": 72,
+      "fighterName": "Sora"
+    },
+    {
+      "fid": 73,
+      "fighterName": "Sephiroth"
+    },
+    {
+      "fid": 74,
+      "fighterName": "Aegis"
+    },
+    {
+      "fid": 75,
+      "fighterName": "Steve"
+    },
+    {
+      "fid": 76,
+      "fighterName": "Joker"
+    },
+    {
+      "fid": 77,
+      "fighterName": "Kazuya"
+    },
+    {
+      "fid": 78,
+      "fighterName": "Terry"
+    },
+    {
+      "fid": 79,
+      "fighterName": "Banjo"
+    },
+    {
+      "fid": 80,
+      "fighterName": "Min-Min"
+    },
+    {
+      "fid": 81,
+      "fighterName": "Plant"
+    },
+    {
+      "fid": 82,
+      "fighterName": "Hero"
+    },
+    {
+      "fid": 83,
+      "fighterName": "Byleth"
+    }
+  ]
+}

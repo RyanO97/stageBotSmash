@@ -1,0 +1,34 @@
+{
+  "stagePools": [
+    {
+      "cp": [3, 4],
+      "stagePool": [1, 2, 3, 4, 6, 7, 8],
+      "stagePoolId": 1,
+      "stagePoolName": "Bot Bash Stage Pool Season 0"
+    },
+    {
+      "cp": [5, 10],
+      "stagePool": [1, 5, 6, 8, 10, 12, 13],
+      "stagePoolId": 2,
+      "stagePoolName": "Bot Bash Stage Pool Season 1"
+    },
+    {
+      "cp": [2, 4, 12],
+      "stagePool": [1, 2, 3, 4, 6, 7, 8, 12],
+      "stagePoolId": 4,
+      "stagePoolName": "Lets Make Big Moves 2023"
+    },
+    {
+      "cp": [8, 7],
+      "stagePool": [3, 4, 6, 7, 8, 12, 1],
+      "stagePoolId": 5,
+      "stagePoolName": "Genesis X"
+    },
+    {
+      "cp": [3, 4, 12],
+      "stagePool": [1, 2, 3, 4, 6, 7, 8, 12],
+      "stagePoolId": 7,
+      "stagePoolName": "The Cave VA Feb 2024"
+    }
+  ]
+}

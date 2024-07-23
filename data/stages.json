@@ -1,0 +1,60 @@
+{
+  "stages": [
+    {
+      "sid": 1,
+      "stageName": "Battlefield"
+    },
+    {
+      "sid": 2,
+      "stageName": "Kalos Pokemon League"
+    },
+    {
+      "sid": 3,
+      "stageName": "Small Battlefield"
+    },
+    {
+      "sid": 4,
+      "stageName": "Final Destination"
+    },
+    {
+      "sid": 5,
+      "stageName": "Yoshi's Story"
+    },
+    {
+      "sid": 6,
+      "stageName": "Pokemon Stadium 2"
+    },
+    {
+      "sid": 7,
+      "stageName": "Smashville"
+    },
+    {
+      "sid": 8,
+      "stageName": "Town and City"
+    },
+    {
+      "sid": 9,
+      "stageName": "Fountain of Dreams"
+    },
+    {
+      "sid": 10,
+      "stageName": "Wiley Castle"
+    },
+    {
+      "sid": 11,
+      "stageName": "Dream Land"
+    },
+    {
+      "sid": 12,
+      "stageName": "Hollow Bastion"
+    },
+    {
+      "sid": 13,
+      "stageName": "Northern Cave"
+    },
+    {
+      "sid": 14,
+      "stageName": "Yoshi Island"
+    }
+  ]
+}
