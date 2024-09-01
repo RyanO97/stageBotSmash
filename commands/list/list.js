@@ -22,7 +22,7 @@ function starters(stagelist, counterpicks) {
 function names(stagelist) {
 	let nameList = '';
 	for (let i = 0; i < stagelist.length; i++) {
-		nameList = nameList + '* ' + (s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName + '\n');
+		nameList = `${nameList}* ${s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName}\n`;
 	}
 	return nameList;
 }
