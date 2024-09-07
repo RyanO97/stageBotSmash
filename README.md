@@ -6,6 +6,9 @@ email: emceeromeo@gmail.com
 
 discord: @romioh
 
+App Demo, May 2024 <br />
+https://www.youtube.com/watch?v=AyQQcyP266o
+
 # Stage Picking - A necessary process betweeen two entrants in a fighting game tournament that decides the stages for each game in a match. 
 
 This is Project "Stagebot"(Subject to change, please and thanks!) <br />
