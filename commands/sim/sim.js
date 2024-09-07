@@ -78,40 +78,7 @@ module.exports = {
 			interaction
 				.respond(filtered.slice(0, 25))
 				.catch(() => {console.error;});
-			/* if (focusedValue.name === 'fighter1' || focusedValue.name === 'fighter2') {
-				const choices = characters;
-				const filtered = choices
-					.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
-					.map(choice => ({ name: choice.name, value: choice.name }));
-				interaction
-					.respond(filtered.slice(0, 25))
-					.catch(() => {console.error;});
-			}
-			else if (focusedValue.name === 'stagelist') {
-				const choices = pools;
-				const filtered = choices
-					.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
-					.map(choice => ({ name: choice.name, value: choice.name }));
-				interaction
-					.respond(filtered.slice(0, 25))
-					.catch(() => {console.error;});
-			} */
 		});
-		/* if (focusedValue.name === 'fighter1' || focusedValue.name === 'fighter2') {
-			const choices = characters;
-			const filtered = choices
-				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
-				.map(choice => ({ name: choice.name, value: choice.name }));
-		}
-		else if (focusedValue.name === 'stagelist') {
-			const choices = pools;
-			const filtered = choices
-				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
-				.map(choice => ({ name: choice.name, value: choice.name }));
-			await interaction
-				.respond(filtered.slice(0, 25))
-				.catch(() => {console.error;});
-		} */
 
 	},
 	async execute(interaction) {
