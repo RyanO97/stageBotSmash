@@ -23,10 +23,10 @@ returns the list of stages that the bot has data for, given a fighter and stage 
 # /sim [fighter1] [fighter2] [stagelist]
 simulates the stage strike and pick process based on data for two fighters, given a stage list
 
-# /strike [fighter] [stage list]
+# /strike [fighter] [stagelist]
 for use in case that the user wants to ban stages and the bot counterpicks from what is remaining in a stage list
 
-# /pick [fighter] [stage list]
+# /pick [fighter] [stagelist]
 for use in case that the user want the bot to ban stages and then user counterpicks from the remaining in a stage list
 
 # /list
@@ -35,7 +35,7 @@ for use in case that the user wants to view available stage lists according to d
 
 # Future enhancements
 
-enhancements to /strike and /pick to enable stage picking between users
+enhancements to /strike and /pick to enable stage picking between users <br />
 introduce database connectivity for future api and data development efforts 
 
 # QNA
