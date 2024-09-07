@@ -7,20 +7,6 @@ const path = require('node:path');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
-/* const database = require('./database');
-
-async function main() {
-	try {
-		const results = await database.query('select JSON_ARRAYAGG(stagePrefs) as stagePrefs from front_json');
-		const r = JSON.parse(JSON.stringify(results));
-		return r[0].stagePrefs;
-	}
-	catch (error) {
-		console.error('Error:', error);
-	}
-}
-
-main().then((data) => {console.log(data);}); */
 
 // When the client is ready, run this code (only once).
 // The distinction between `client: Client<boolean>` and `readyClient: Client<true>` is important for TypeScript developers.

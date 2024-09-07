@@ -5,11 +5,8 @@ const fsp = require('../../data/fsp');
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
-const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
+
 const pools = p.stagePools.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId };});
-const characters = f.fighters
-	.filter((fighter) => {return fighterList.includes(fighter.fid);})
-	.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 
 /**
 	 *
@@ -66,6 +63,10 @@ module.exports = {
 				.setRequired(true),
 		),
 	async autocomplete(interaction) {
+		const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
+		const characters = f.fighters
+			.filter((fighter) => {return fighterList.includes(fighter.fid);})
+			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 		const focusedValue = interaction.options.getFocused(true);
 		if (focusedValue.name === 'fighter1') {
 			const choices = characters;
@@ -97,11 +98,14 @@ module.exports = {
 
 	},
 	async execute(interaction) {
+		// redundant code must refactor and remove
+		const characters = f.fighters
+			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 		// get fighters and data
 		const a = interaction.options.getString('fighter1');
 		const b = interaction.options.getString('fighter2');
-		const f1 = characters.find((c) => c.name === a);
-		const f2 = characters.find((c) => c.name === b);
+		const f1 = characters.find((c) => c.name === a).id;
+		const f2 = characters.find((c) => c.name === b).id;
 		// get stage list data
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
@@ -109,8 +113,8 @@ module.exports = {
 
 		// get stage prefs for the selections above
 		await fsp().then((prefsArray) => {
-			const f1Pref = prefsArray.find((fighter) => {return fighter.fid === f1.id;}).stage_pref;
-			const f2Pref = prefsArray.find((fighter) => {return fighter.fid === f2.id;}).stage_pref;
+			const f1Pref = prefsArray.find((fighter) => {return fighter.fid === f1;}).stage_pref;
+			const f2Pref = prefsArray.find((fighter) => {return fighter.fid === f2;}).stage_pref;
 			// filter down fighter's data based on stagelist
 			const f1Pool = f1Pref.filter((stage) => {return selectedPool.includes(stage);});
 			const f2Pool = f2Pref.filter((stage) => {return selectedPool.includes(stage);});
