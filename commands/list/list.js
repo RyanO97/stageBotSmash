@@ -7,7 +7,7 @@ const s = require('../../data/stages.json');
  * @param {Array} stagelist the list of id's to return stage names
  * @returns string stage names of each id in array
  */
-const names = async (stagelist) => {
+const names = (stagelist) => {
 	let nameList = '';
 	for (let i = 0; i < stagelist.length; i++) {
 		nameList = `${nameList}* ${s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName}\n`;

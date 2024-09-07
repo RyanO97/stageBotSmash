@@ -1,5 +1,12 @@
 const { bold, strikethrough, italic, SlashCommandBuilder } = require('discord.js');
 const d = require('../../data/fighter_stage_prefs.json');
+const dtwo = require('../../data/fsp');
+const main = async () => {
+	await dtwo().then((data) => {return data;});
+};
+
+main();
+
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
@@ -31,6 +38,7 @@ function stagePick(ban, pick) {
 		const bans = [];
 		bans.push(ban[ban.length - 1]);
 		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
+		const b2 = s.stages.find((st2) => {return st2.sid === bans[1];}).stageName;
 		const opponentPicks = pick.filter((stage) => {return bans.includes(stage);});
 		return opponentPicks.length > 1 ?
 			`will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpicks are ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)} first or ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[1];}).stageName)} second`

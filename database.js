@@ -1,6 +1,6 @@
 const mysql = require('mysql2');
 const { dburl } = require('./config.json');
-const connection = mysql.createConnection(dburl);
+const connection = mysql.createPool(dburl);
 const database = {
 	connect: () => {
 		if (!connection) {
