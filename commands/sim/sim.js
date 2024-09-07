@@ -1,7 +1,7 @@
 const { bold, strikethrough, italic, SlashCommandBuilder } = require('discord.js');
 const d = require('../../data/fighter_stage_prefs.json');
 // should replace above const
-const fsp = require('../../data/fsp');
+const fighterStagePrefs = require('../../data/fighterStagePrefs');
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
@@ -63,28 +63,45 @@ module.exports = {
 				.setRequired(true),
 		),
 	async autocomplete(interaction) {
-		const fighterList = d.stagePrefs.map((fighter) => {return fighter.fid;});
-		const characters = f.fighters
-			.filter((fighter) => {return fighterList.includes(fighter.fid);})
-			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
-		const focusedValue = interaction.options.getFocused(true);
-		if (focusedValue.name === 'fighter1') {
+		await fighterStagePrefs.getDataFID().then((fidArray) => {
+			const characters = f.fighters
+				.filter((fighter) => {return fidArray.includes(fighter.fid);})
+				.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
+			const focusedValue = interaction.options.getFocused(true);
+			const choices = focusedValue.name === 'fighter1' ? characters
+				: focusedValue.name === 'fighter2' ? characters
+					: focusedValue.name === 'stagelist' ? pools
+						: characters;
+			const filtered = choices
+				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
+				.map(choice => ({ name: choice.name, value: choice.name }));
+			interaction
+				.respond(filtered.slice(0, 25))
+				.catch(() => {console.error;});
+			/* if (focusedValue.name === 'fighter1' || focusedValue.name === 'fighter2') {
+				const choices = characters;
+				const filtered = choices
+					.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
+					.map(choice => ({ name: choice.name, value: choice.name }));
+				interaction
+					.respond(filtered.slice(0, 25))
+					.catch(() => {console.error;});
+			}
+			else if (focusedValue.name === 'stagelist') {
+				const choices = pools;
+				const filtered = choices
+					.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
+					.map(choice => ({ name: choice.name, value: choice.name }));
+				interaction
+					.respond(filtered.slice(0, 25))
+					.catch(() => {console.error;});
+			} */
+		});
+		/* if (focusedValue.name === 'fighter1' || focusedValue.name === 'fighter2') {
 			const choices = characters;
 			const filtered = choices
 				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
 				.map(choice => ({ name: choice.name, value: choice.name }));
-			await interaction
-				.respond(filtered.slice(0, 25))
-				.catch(() => {console.error;});
-		}
-		else if (focusedValue.name === 'fighter2') {
-			const choices = characters;
-			const filtered = choices
-				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
-				.map(choice => ({ name: choice.name, value: choice.name }));
-			await interaction
-				.respond(filtered.slice(0, 25))
-				.catch(() => {console.error;});
 		}
 		else if (focusedValue.name === 'stagelist') {
 			const choices = pools;
@@ -94,16 +111,17 @@ module.exports = {
 			await interaction
 				.respond(filtered.slice(0, 25))
 				.catch(() => {console.error;});
-		}
+		} */
 
 	},
 	async execute(interaction) {
-		// redundant code must refactor and remove
-		const characters = f.fighters
-			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 		// get fighters and data
 		const a = interaction.options.getString('fighter1');
 		const b = interaction.options.getString('fighter2');
+		// filter down selections
+		const characters = f.fighters
+			.filter((fighter) => {return [a, b].includes(fighter.fighterName);})
+			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 		const f1 = characters.find((c) => c.name === a).id;
 		const f2 = characters.find((c) => c.name === b).id;
 		// get stage list data
@@ -112,7 +130,7 @@ module.exports = {
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 
 		// get stage prefs for the selections above
-		await fsp([f1, f2]).then((prefsArray) => {
+		await fighterStagePrefs.fetchPrefs([f1, f2]).then((prefsArray) => {
 			const f1Pref = prefsArray.find((fighter) => {return fighter.fid === f1;}).stage_pref;
 			const f2Pref = prefsArray.find((fighter) => {return fighter.fid === f2;}).stage_pref;
 			// filter down fighter's data based on stagelist
