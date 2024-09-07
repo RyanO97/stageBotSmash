@@ -112,7 +112,7 @@ module.exports = {
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 
 		// get stage prefs for the selections above
-		await fsp().then((prefsArray) => {
+		await fsp([f1, f2]).then((prefsArray) => {
 			const f1Pref = prefsArray.find((fighter) => {return fighter.fid === f1;}).stage_pref;
 			const f2Pref = prefsArray.find((fighter) => {return fighter.fid === f2;}).stage_pref;
 			// filter down fighter's data based on stagelist
@@ -122,7 +122,7 @@ module.exports = {
 			const f1Results = stagePick(f1Pool, f2Pool);
 			const f2Results = stagePick(f2Pool, f1Pool);
 
-			interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${f1.name} ${f1Results}\n${f2.name} ${f2Results}`);
+			interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${a} ${f1Results}\n${b} ${f2Results}`);
 		});
 	},
 };

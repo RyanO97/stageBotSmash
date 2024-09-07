@@ -11,9 +11,9 @@ const database = {
 		}
 		return connection;
 	},
-	query: (sql) => {
+	query: (sql, values) => {
 		return new Promise((resolve, reject) => {
-			connection.query(sql, (err, results) => {
+			connection.query(sql, values, (err, results) => {
 				if (err) reject(err);
 				else resolve(results);
 			});
