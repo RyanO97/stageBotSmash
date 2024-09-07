@@ -1,6 +1,4 @@
 const { bold, strikethrough, italic, SlashCommandBuilder } = require('discord.js');
-const d = require('../../data/fighter_stage_prefs.json');
-// should replace above const
 const fighterStagePrefs = require('../../data/fighterStagePrefs');
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
