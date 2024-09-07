@@ -1,12 +1,7 @@
 const { bold, strikethrough, italic, SlashCommandBuilder } = require('discord.js');
 const d = require('../../data/fighter_stage_prefs.json');
-const dtwo = require('../../data/fsp');
-const main = async () => {
-	await dtwo().then((data) => {return data;});
-};
-
-main();
-
+// should replace above const
+const fsp = require('../../data/fsp');
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
@@ -107,19 +102,23 @@ module.exports = {
 		const b = interaction.options.getString('fighter2');
 		const f1 = characters.find((c) => c.name === a);
 		const f2 = characters.find((c) => c.name === b);
-		const f1Pref = d.stagePrefs.find((fighter) => {return fighter.fid === f1.id;}).stage_pref;
-		const f2Pref = d.stagePrefs.find((fighter) => {return fighter.fid === f2.id;}).stage_pref;
 		// get stage list data
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
-		// filter down fighter's data based on stagelist
-		const f1Pool = f1Pref.filter((stage) => {return selectedPool.includes(stage);});
-		const f2Pool = f2Pref.filter((stage) => {return selectedPool.includes(stage);});
-		// capture actions between players in a match
-		const f1Results = stagePick(f1Pool, f2Pool);
-		const f2Results = stagePick(f2Pool, f1Pool);
 
-		interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${f1.name} ${f1Results}\n${f2.name} ${f2Results}`);
+		// get stage prefs for the selections above
+		await fsp().then((prefsArray) => {
+			const f1Pref = prefsArray.find((fighter) => {return fighter.fid === f1.id;}).stage_pref;
+			const f2Pref = prefsArray.find((fighter) => {return fighter.fid === f2.id;}).stage_pref;
+			// filter down fighter's data based on stagelist
+			const f1Pool = f1Pref.filter((stage) => {return selectedPool.includes(stage);});
+			const f2Pool = f2Pref.filter((stage) => {return selectedPool.includes(stage);});
+			// capture actions between players in a match
+			const f1Results = stagePick(f1Pool, f2Pool);
+			const f2Results = stagePick(f2Pool, f1Pool);
+
+			interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${f1.name} ${f1Results}\n${f2.name} ${f2Results}`);
+		});
 	},
 };
