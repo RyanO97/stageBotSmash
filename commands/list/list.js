@@ -30,6 +30,8 @@ const pools = p.stagePools
 	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
 
 module.exports = {
+	starters,
+	names,
 	data: new SlashCommandBuilder().setName('list').setDescription('View stage lists'),
 	async execute(interaction) {
 		const select = new StringSelectMenuBuilder()
@@ -40,16 +42,16 @@ module.exports = {
 		const row = new ActionRowBuilder()
 			.addComponents(select);
 
-		const response = await interaction.reply({
+		await interaction.reply({
 			content: 'Choose your Stage List!',
 			components: [row],
-		});
-		const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
-
-		collector.on('collect', async i => {
-			const selection = i.values[0];
-			const picked = pools.find((c) => c.name === selection).set;
-			await i.reply(`Stage list for ${bold(selection)}\n${picked}`);
+		}).then((response) => {
+			const collector = response.createMessageComponentCollector({ componentType: ComponentType.StringSelect, time: 3_600_000 });
+			collector.on('collect', async i => {
+				const selection = i.values[0];
+				const picked = pools.find((c) => c.name === selection).set;
+				await i.reply(`Stage list for ${bold(selection)}\n${picked}`);
+			});
 		});
 	},
 };

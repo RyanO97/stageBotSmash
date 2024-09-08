@@ -3,16 +3,14 @@ const fighterStagePrefs = require('../../data/fighterStagePrefs');
 const f = require('../../data/fighters.json');
 const p = require('../../data/stage_pools.json');
 const s = require('../../data/stages.json');
-
 const pools = p.stagePools.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId };});
-
 /**
 	 *
 	 * @param {Array} ban the ordered list of stages of player that is banning stages
 	 * @param {Array} pick the ordered list of stages of player that is going to pick the stage for game
 	 * @returns string indicating the strike and counterpick resulsts between fighters
 	 */
-function stagePick(ban, pick) {
+const stagePick = (ban, pick) => {
 	if (ban.length >= 3 && pick.length >= 3) {
 		const bans = [];
 		bans.push(ban[ban.length - 1]);
@@ -37,8 +35,14 @@ function stagePick(ban, pick) {
 	else {
 		return 'does not have sufficient stage data';
 	}
-}
+};
 module.exports = {
+	fighterStagePrefs,
+	f,
+	p,
+	s,
+	pools,
+	stagePick,
 	data: new SlashCommandBuilder()
 		.setName('sim')
 		.setDescription('simulate stage selection between bot fighters')
