@@ -3,3 +3,7 @@ config.json
 stageBotSmash.code-workspace
 .eslintrc.json
 node_modules
+.dockerignore
+Dockerfile
+README.Docker.md
+compose.yaml
