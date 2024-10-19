@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
-const { dburl } = require('./config.json');
+require('dotenv').config();
+const { dburl } = process.env;
 const connection = mysql.createPool(dburl);
 const database = {
 	connect: () => {
