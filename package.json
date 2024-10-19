@@ -1,6 +1,6 @@
 {
   "name": "stagebotsmash",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "chat bot application for fighting game tournament match simulation",
   "main": "index.js",
   "scripts": {
