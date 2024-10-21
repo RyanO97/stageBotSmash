@@ -1,9 +1,9 @@
 const { bold, strikethrough, italic, SlashCommandBuilder } = require('discord.js');
 const fighterStagePrefs = require('../../data/fighterStagePrefs');
-const f = require('../../data/fighters.json');
-const p = require('../../data/stage_pools.json');
-const s = require('../../data/stages.json');
-const pools = p.stagePools.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId };});
+const f = require('../../data/fighters.json').fighters;
+const p = require('../../data/stage_pools.json').stagePools;
+const s = require('../../data/stages.json').stages;
+const pools = p.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId };});
 /**
 	 *
 	 * @param {Array} ban the ordered list of stages of player that is banning stages
@@ -15,22 +15,22 @@ const stagePick = (ban, pick) => {
 		const bans = [];
 		bans.push(ban[ban.length - 1]);
 		bans.push(ban[ban.length - 2]);
-		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
-		const b2 = s.stages.find((st2) => {return st2.sid === bans[1];}).stageName;
+		const b1 = s.find((st) => {return st.sid === bans[0];}).stageName;
+		const b2 = s.find((st2) => {return st2.sid === bans[1];}).stageName;
 		const opponentPicks = pick.filter((stage) => {return !bans.includes(stage);});
 		return opponentPicks.length > 1 ?
-			`will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpicks are ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)} first or ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[1];}).stageName)} second`
-			: `will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpick is ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
+			`will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpicks are ${bold(s.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)} first or ${bold(s.find((st3) => {return st3.sid === opponentPicks[1];}).stageName)} second`
+			: `will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpick is ${bold(s.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
 	}
 	else if ((ban.length >= 3 && pick.length == 2) || (ban.length == 2 && pick.length == 2)) {
 		const bans = [];
 		bans.push(ban[ban.length - 1]);
-		const b1 = s.stages.find((st) => {return st.sid === bans[0];}).stageName;
-		const b2 = s.stages.find((st2) => {return st2.sid === bans[1];}).stageName;
+		const b1 = s.find((st) => {return st.sid === bans[0];}).stageName;
+		const b2 = s.find((st2) => {return st2.sid === bans[1];}).stageName;
 		const opponentPicks = pick.filter((stage) => {return bans.includes(stage);});
 		return opponentPicks.length > 1 ?
-			`will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpicks are ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)} first or ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[1];}).stageName)} second`
-			: `will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpick is ${bold(s.stages.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
+			`will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpicks are ${bold(s.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)} first or ${bold(s.find((st3) => {return st3.sid === opponentPicks[1];}).stageName)} second`
+			: `will ban ${strikethrough(b1)} and ${strikethrough(b2)}, and the counterpick is ${bold(s.find((st3) => {return st3.sid === opponentPicks[0];}).stageName)}`;
 	}
 	else {
 		return 'does not have sufficient stage data';
@@ -66,7 +66,7 @@ module.exports = {
 		),
 	async autocomplete(interaction) {
 		await fighterStagePrefs.getDataFID().then((fidArray) => {
-			const characters = f.fighters
+			const characters = f
 				.filter((fighter) => {return fidArray.includes(fighter.fid);})
 				.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 			const focusedValue = interaction.options.getFocused(true);
@@ -88,7 +88,7 @@ module.exports = {
 		const a = interaction.options.getString('fighter1');
 		const b = interaction.options.getString('fighter2');
 		// filter down selections
-		const characters = f.fighters
+		const characters = f
 			.filter((fighter) => {return [a, b].includes(fighter.fighterName);})
 			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 		const f1 = characters.find((c) => c.name === a).id;
@@ -96,7 +96,7 @@ module.exports = {
 		// get stage list data
 		const l = interaction.options.getString('stagelist');
 		const list = pools.find((c) => c.name === l);
-		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 
 		// get stage prefs for the selections above
 		await fighterStagePrefs.fetchPrefs([f1, f2]).then((prefsArray) => {

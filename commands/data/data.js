@@ -1,9 +1,7 @@
 const { bold, italic, SlashCommandBuilder } = require('discord.js');
-const { names, starters } = require('../../commands/list/list');
+const { names } = require('../../commands/list/list');
 const { autocomplete } = require('../../commands/pick/pick');
-const { f, p, fighterStagePrefs } = require('../../commands/sim/sim');
-const pools = p.stagePools
-	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
+const { f, p, fighterStagePrefs, pools } = require('../../commands/sim/sim');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('data')
@@ -25,11 +23,11 @@ module.exports = {
 		// get fighter data
 		const a = interaction.options.getString('fighter');
 		const l = interaction.options.getString('stagelist');
-		const character = f.fighters
+		const character = f
 			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };})
 			.find((fighter) => fighter.name === a);
 		const list = pools.find((c) => c.name === l);
-		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 		// retrieve single fighter data with the given stage list
 		await fighterStagePrefs.fetchPrefs([character.id]).then((prefsArray) => {
 			const selectedPref = prefsArray.find((fighter) => {return fighter.fid === character.id;}).stage_pref;

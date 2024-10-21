@@ -1,7 +1,5 @@
 const { bold, italic, ComponentType, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder } = require('discord.js');
-
-const p = require('../../data/stage_pools.json');
-const s = require('../../data/stages.json');
+const { p, s } = require('../../commands/sim/sim');
 /**
  *
  * @param {Array} stagelist the list of id's to return stage names
@@ -10,7 +8,7 @@ const s = require('../../data/stages.json');
 const names = (stagelist) => {
 	let nameList = '';
 	for (let i = 0; i < stagelist.length; i++) {
-		nameList = `${nameList}* ${s.stages.find((stage) => { return stage.sid === stagelist[i]; }).stageName}\n`;
+		nameList = `${nameList}* ${s.find((stage) => { return stage.sid === stagelist[i]; }).stageName}\n`;
 	}
 	return nameList;
 };
@@ -26,7 +24,7 @@ const starters = (stagelist, counterpicks) => {
 	return starts;
 };
 
-const pools = p.stagePools
+const pools = p
 	.map((list) => { return { name:list.stagePoolName, id:list.stagePoolId, set:`${bold(italic('Starters'))} \n${names(starters(list.stagePool, list.cp))}\n${bold(italic('Counterpicks'))} \n${names(list.cp)}` };});
 
 module.exports = {
@@ -37,11 +35,9 @@ module.exports = {
 		const select = new StringSelectMenuBuilder()
 			.setCustomId('starter')
 			.setPlaceholder('Make a selection!')
-			.addOptions(p.stagePools.map((list) => new StringSelectMenuOptionBuilder().setLabel(list.stagePoolName).setValue(list.stagePoolName)));
-
+			.addOptions(pools.map((list) => new StringSelectMenuOptionBuilder().setLabel(list.name).setValue(list.name)));
 		const row = new ActionRowBuilder()
 			.addComponents(select);
-
 		await interaction.reply({
 			content: 'Choose your Stage List!',
 			components: [row],

@@ -1,8 +1,6 @@
 const { strikethrough, bold, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType } = require('discord.js');
 const { fighterStagePrefs, f, p, s, pools } = require('../../commands/sim/sim');
-const stages = s.stages;
 module.exports = {
-	stages,
 	data: new SlashCommandBuilder()
 		.setName('pick')
 		.setDescription('counterpick a stage against a bot')
@@ -20,7 +18,7 @@ module.exports = {
 		),
 	async autocomplete(interaction) {
 		await fighterStagePrefs.getDataFID().then((fidArray) => {
-			const characters = f.fighters
+			const characters = f
 				.filter((fighter) => {return fidArray.includes(fighter.fid);})
 				.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 			const focusedValue = interaction.options.getFocused(true);
@@ -39,11 +37,11 @@ module.exports = {
 		// match user input against known fighters and stagelists
 		const a = interaction.options.getString('fighter');
 		const l = interaction.options.getString('stagelist');
-		const character = f.fighters
+		const character = f
 			.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };})
 			.find((fighter) => fighter.name === a);
 		const list = pools.find((c) => c.name === l);
-		const selectedPool = p.stagePools.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
+		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 		await fighterStagePrefs.fetchPrefs([character.id]).then((prefsArray) => {
 			// get the fighter data
 			const selectedPref = prefsArray.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
@@ -51,10 +49,10 @@ module.exports = {
 			// based on fighter data, apply worst stage bans to selection list before user selection
 			const strikePool = fighterPool.length >= 3 ? [fighterPool[fighterPool.length - 1], fighterPool[fighterPool.length - 2]] : [fighterPool[fighterPool.length - 1]];
 			const selections = selectedPool.filter((stage) => {return !strikePool.includes(stage);});
-			const stageSelections = stages.filter((stage) => {return selections.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
+			const stageSelections = s.filter((stage) => {return selections.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
 			const strikeNames = strikePool
 				.map((stage) => {
-					return strikethrough(stages
+					return strikethrough(s
 						.find((n) => {return n.sid === stage;}).stageName);
 				});
 			const strikeString = `${character.name} bans the following stages\n${strikeNames.toString()}\n Choose your stage`;
