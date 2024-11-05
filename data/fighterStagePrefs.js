@@ -4,7 +4,7 @@ const view = 'front_json';
 const results = {
 	fetchPrefs: async (selected) => {
 		try {
-			const query = `select JSON_ARRAYAGG(stagePrefs) as stagePrefs from ${view} where fid in (select fid from front_json where fid in (${Array(selected.length).fill('?').join(',')}))`;
+			const query = `select JSON_ARRAYAGG(stagePrefs) as stagePrefs from ${view} where fid in (select fid from ${view} where fid in (${Array(selected.length).fill('?').join(',')}))`;
 			const rs = await db.execute(
 				query, selected,
 			);

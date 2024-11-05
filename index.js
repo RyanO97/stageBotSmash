@@ -1,7 +1,8 @@
 // Require the necessary discord.js classes
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
-const { token } = process.env;
+const { token, NODE_ENV } = process.env;
+console.log(`environment: ${ JSON.stringify(NODE_ENV) }`);
 const fs = require('node:fs');
 const path = require('node:path');
 
