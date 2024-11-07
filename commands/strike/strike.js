@@ -28,8 +28,9 @@ module.exports = {
 		// get selected stage list data
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
-		// determine number of strikes and stages for user to select
-		await fighterStagePrefs.fetchPrefs([character.id]).then((prefsArray) => {
+		try {
+			// determine number of strikes and stages for user to select
+			const prefsArray = await fighterStagePrefs.fetchPrefs([character.id]);
 			const selectedPref = prefsArray.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
 			const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
 			const stageSelections = s.filter((stage) => {return selectedPool.includes(stage.sid);}).map((sta) => new StringSelectMenuOptionBuilder().setLabel(sta.stageName).setValue(sta.stageName));
@@ -58,7 +59,10 @@ module.exports = {
 					const secondaryPick = decision.length > 1 ? s.find((n) => {return n.sid === decision[1];}).stageName : '';
 					await i.reply(`${character.name} picks ${bold(pickName)}!${decision.length > 1 ? '\nSecondary pick is ' + bold(secondaryPick) + '!' : ''}`);
 				});
-			});
-		});
+			});	
+		} catch (error) {
+			console.error('Error executing request:', error);
+		}
+		
 	},
 };

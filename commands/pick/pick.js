@@ -17,21 +17,23 @@ module.exports = {
 				.setRequired(true),
 		),
 	async autocomplete(interaction) {
-		await fighterStagePrefs.getDataFID().then((fidArray) => {
+		try {
+			const fidArray = await fighterStagePrefs.getDataFID();
 			const characters = f
-				.filter((fighter) => {return fidArray.includes(fighter.fid);})
-				.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
+					.filter((fighter) => {return fidArray.includes(fighter.fid);})
+					.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 			const focusedValue = interaction.options.getFocused(true);
 			const choices = focusedValue.name === 'fighter' ? characters
-				: focusedValue.name === 'stagelist' ? pools
-					: characters;
+				: pools;
 			const filtered = choices
 				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
 				.map(choice => ({ name: choice.name, value: choice.name }));
 			interaction
 				.respond(filtered.slice(0, 25))
 				.catch(() => {console.error;});
-		});
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
 	},
 	async execute(interaction) {
 		// match user input against known fighters and stagelists
@@ -42,7 +44,8 @@ module.exports = {
 			.find((fighter) => fighter.name === a);
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
-		await fighterStagePrefs.fetchPrefs([character.id]).then((prefsArray) => {
+		try {
+			const prefsArray = await fighterStagePrefs.fetchPrefs([character.id]);
 			// get the fighter data
 			const selectedPref = prefsArray.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
 			const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
@@ -76,6 +79,8 @@ module.exports = {
 					await i.reply(`${interaction.user} picks ${bold(selection)}!`);
 				});
 			});
-		});
+		} catch (error) {
+			console.error('Error executing request:', error);
+		}
 	},
 };

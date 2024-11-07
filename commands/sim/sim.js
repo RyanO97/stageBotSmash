@@ -65,22 +65,24 @@ module.exports = {
 				.setRequired(true),
 		),
 	async autocomplete(interaction) {
-		await fighterStagePrefs.getDataFID().then((fidArray) => {
+		try {
+			const fidArray = await fighterStagePrefs.getDataFID();
 			const characters = f
 				.filter((fighter) => {return fidArray.includes(fighter.fid);})
 				.map((fighter) => {return { name:fighter.fighterName, id: fighter.fid };});
 			const focusedValue = interaction.options.getFocused(true);
-			const choices = focusedValue.name === 'fighter1' ? characters
-				: focusedValue.name === 'fighter2' ? characters
-					: focusedValue.name === 'stagelist' ? pools
-						: characters;
+			const choices = ['fighter1', 'fighter2'].includes(focusedValue.name) ? characters
+					: pools;
 			const filtered = choices
 				.filter(choice => choice.name.toLowerCase().startsWith(focusedValue.value))
 				.map(choice => ({ name: choice.name, value: choice.name }));
 			interaction
 				.respond(filtered.slice(0, 25))
 				.catch(() => {console.error;});
-		});
+			
+		} catch (error) {
+			console.error('Error executing request:', error);
+		}
 
 	},
 	async execute(interaction) {
@@ -99,7 +101,8 @@ module.exports = {
 		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
 
 		// get stage prefs for the selections above
-		await fighterStagePrefs.fetchPrefs([f1, f2]).then((prefsArray) => {
+		try {
+			const prefsArray = await fighterStagePrefs.fetchPrefs([f1, f2]);
 			const f1Pref = prefsArray.find((fighter) => {return fighter.fid === f1;}).stage_pref;
 			const f2Pref = prefsArray.find((fighter) => {return fighter.fid === f2;}).stage_pref;
 			// filter down fighter's data based on stagelist
@@ -110,6 +113,9 @@ module.exports = {
 			const f2Results = stagePick(f2Pool, f1Pool);
 
 			interaction.reply(`For this stagelist ${bold(italic(list.name))}\n\n${a} ${f1Results}\n${b} ${f2Results}`);
-		});
+			
+		} catch (error) {
+			console.error('Error executing request:', error);
+		}
 	},
 };

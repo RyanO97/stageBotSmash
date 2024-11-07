@@ -28,13 +28,16 @@ module.exports = {
 			.find((fighter) => fighter.name === a);
 		const list = pools.find((c) => c.name === l);
 		const selectedPool = p.find((stage) => {return stage.stagePoolId === list.id;}).stagePool;
-		// retrieve single fighter data with the given stage list
-		await fighterStagePrefs.fetchPrefs([character.id]).then((prefsArray) => {
+		try {
+			// retrieve single fighter data with the given stage list
+			const prefsArray = await fighterStagePrefs.fetchPrefs([character.id]);
 			const selectedPref = prefsArray.find((fighter) => {return fighter.fid === character.id;}).stage_pref;
 			const fighterPool = selectedPref.filter((stage) => {return selectedPool.includes(stage);});
 			const fighterSet = names(fighterPool);
 			// bot response
 			interaction.reply(`For the ruleset ${bold(italic(list.name))}\n\n${bold(italic(character.name))} has cpu data for \n${bold(fighterSet)}`);
-		});
+		} catch (error) {
+			console.error('Error executing request:', error);
+		}
 	},
 };
