@@ -4,7 +4,8 @@ services:
       context: .
     environment:
       NODE_ENV: production
-    image: node:22.10.0-alpine3.20 
+    image: stagebot-app:latest 
+    mem_limit: "512M"
   stagebot-db:
     image: mysql:8.0.37
     environment:
@@ -16,5 +17,6 @@ services:
       - db_data:/var/lib/mysql
     ports:
       - "3307:3306"
+    mem_limit: "512M"
 volumes:
   db_data:
