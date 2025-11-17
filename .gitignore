@@ -4,3 +4,4 @@ stageBotSmash.code-workspace
 .eslintrc.json
 node_modules
 init-scripts
+.pnpm
