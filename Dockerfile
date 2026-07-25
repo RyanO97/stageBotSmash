@@ -16,18 +16,14 @@ WORKDIR /usr/src/app
 # into this layer.
 USER root
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=yarn.lock,target=yarn.lock \
-    --mount=type=cache,target=usr/src/app/.yarn \
-    --mount=type=cache,target=usr/src/app/.pnp.cjs 
-    # corepack enable \
-    # && corepack prepare yarn@4.6.0 --activate \
-    # && yarn -v \
-    # && yarn cache clean \
-    # && yarn install 
-# Run the application as a non-root user.
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm cache clean --force \
+    && npm ci --omit=dev
+
 USER node
 # Copy the rest of the source files into the image.
 COPY . .
 
 # Run the application.
-CMD yarn start
+CMD npm start
